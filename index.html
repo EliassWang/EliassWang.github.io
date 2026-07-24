@@ -1,187 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elias Wang</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Elias Wang</title>
+<meta name="description" content="Elias Wang — AI/LLM security. Intent understanding in language-model conversations, prompt injection, and retrieval security." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f1f3f7;
+    --ink:   #121722;
+    --slate: #5d6678;
+    --rule:  #d5dae4;
+    --flag:  #ab2a55;
 
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 22px;
-      line-height: 1.65;
-      color: #222;
-      background: #fff;
-    }
+    --serif: "Newsreader", "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-    h1 {
-      font-size: 34px;
-      margin-bottom: 4px;
-    }
+    --gutter: 150px;
+  }
 
-    h2 {
-      font-size: 22px;
-      margin-top: 34px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #ddd;
-    }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
 
-    h3 {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.68;
+    font-optical-sizing: auto;
+  }
 
-    a {
-      color: #0645ad;
-      text-decoration: none;
-    }
+  .page {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 84px 30px 90px;
+  }
 
-    a:hover {
-      text-decoration: underline;
-    }
+  a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: border-color .18s ease, color .18s ease;
+  }
+  a:hover { color: var(--flag); border-bottom-color: var(--flag); }
+  a:focus-visible { outline: 1.5px solid var(--flag); outline-offset: 3px; }
 
-    ul {
-      margin-top: 6px;
-    }
+  p { margin: 0 0 18px; }
+  p:last-child { margin-bottom: 0; }
 
-    .subtitle {
-      color: #555;
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 0;
+  }
 
-    .contact {
-      margin-top: 18px;
-      margin-bottom: 28px;
-    }
+  h1 {
+    font-weight: 500;
+    font-size: clamp(40px, 6.4vw, 62px);
+    line-height: 1.04;
+    letter-spacing: -.022em;
+    margin: 14px 0 0;
+  }
 
-    .item {
-      margin-bottom: 22px;
-    }
+  .intro {
+    max-width: 34em;
+    margin: 26px 0 0;
+  }
 
-    .meta {
-      color: #666;
-      font-size: 15px;
-      margin-top: 0;
-    }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 26px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+  }
 
-    .tagline {
-      font-size: 17px;
-      margin-top: 20px;
+  /* ---------- sections ---------- */
+
+  section {
+    display: grid;
+    grid-template-columns: var(--gutter) 1fr;
+    gap: 30px;
+    padding-top: 40px;
+    margin-top: 40px;
+    border-top: 1px solid var(--rule);
+  }
+
+  h2 {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin: 6px 0 0;
+  }
+
+  .body { max-width: 40em; }
+
+  h3 {
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -.012em;
+    line-height: 1.35;
+    margin: 0 0 4px;
+  }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--slate);
+    margin: 0 0 10px;
+    line-height: 1.6;
+  }
+  .meta b { color: var(--ink); font-weight: 500; }
+
+  .plain {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .plain li {
+    padding: 9px 0;
+    border-top: 1px dotted var(--rule);
+  }
+  .plain li:first-child { border-top: 0; padding-top: 0; }
+
+  .item { margin-bottom: 26px; }
+  .item:last-child { margin-bottom: 0; }
+
+  .pub { display: grid; grid-template-columns: 32px 1fr; gap: 6px; }
+  .pub .num { font-family: var(--mono); font-size: 13px; color: var(--slate); padding-top: 2px; }
+  .pub em { font-style: italic; }
+
+  .filelinks {
+    font-family: var(--mono);
+    font-size: 12px;
+    margin: 10px 0 0;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  footer {
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+  footer p { margin: 0; }
+
+  @media (max-width: 720px) {
+    body { font-size: 17px; }
+    .page { padding-top: 52px; }
+    section {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding-top: 32px;
+      margin-top: 32px;
     }
-  </style>
+    h2 { margin-top: 0; }
+  }
+</style>
 </head>
 
 <body>
-  <h1>Elias Wang</h1>
+<div class="page">
 
-  <p class="subtitle">
-    Undergraduate Student in Information Security<br />
-    Northeastern University, China
-  </p>
+  <header>
+    <p class="eyebrow">AI / LLM Security</p>
+    <h1>Elias Wang</h1>
 
-  <p class="tagline">
-    I am an undergraduate student in Information Security at Northeastern University, China.
-    My interests focus on AI security and LLM security, especially prompt injection,
-    vulnerability discovery, attack evaluation, and secure LLM-based systems.
-  </p>
+    <div class="intro">
+      <p>
+        I am a final-year undergraduate in Information Security. My research concerns the security
+        of language-model systems, and my main interest is intent understanding in language-model
+        conversations — recovering what a conversation is actually trying to accomplish, and
+        treating that reading as a security signal rather than a routing label.
+      </p>
+      <p>
+        I also work on prompt injection and retrieval poisoning, where my first paper argues that
+        defending a contaminated context is better understood as allocating a limited budget than as
+        detecting malicious text.
+      </p>
+    </div>
 
-  <p class="contact">
-    Email: <a href="mailto:eliaswang.ac@proton.me">eliaswang.ac@proton.me</a><br />
-    GitHub: <a href="https://github.com/EliassWang">https://github.com/EliassWang</a><br />
-    CV: <a href="cv.pdf">Download CV</a>
-  </p>
+    <nav class="links">
+      <a href="cv.pdf">Curriculum vitae</a>
+      <a href="mailto:eliaswangac@gmail.com">eliaswangac@gmail.com</a>
+      <a href="https://github.com/EliassWang">github</a>
+    </nav>
+  </header>
 
-  <h2>Research Interests</h2>
-<ul>
-  <li>AI Security and LLM Security</li>
-  <li>Prompt Injection Attacks and Defenses</li>
-  <li>Vulnerability Discovery in LLM-Based Systems</li>
-  <li>Security of LLM Agents, Tool Use, and Retrieval-Augmented Systems</li>
-  <li>Software Security and Web Security</li>
-</ul>
+  <section>
+    <h2>Interests</h2>
+    <div class="body">
+      <ul class="plain">
+        <li>Intent understanding in language-model conversations</li>
+        <li>Prompt injection and jailbreaking</li>
+        <li>RAG System poison and indirectly prompt injection</li>
+        <li>Security of LLM agents and tool use</li>
+      </ul>
+    </div>
+  </section>
 
-  <h2>Education</h2>
+  <!-- Add a new paper by copying one .pub block; keep newest first. -->
+  <section>
+    <h2>Publications</h2>
+    <div class="body">
+      <div class="pub">
+        <span class="num">[1]</span>
+        <div>
+          <span>
+            Elias Wang. <em>Why Localization Matters: Allocation, Not Detection, for
+            Sparse-Contamination Multi-Source RAG Defense.</em> Under review, ACM Workshop on
+            Artificial Intelligence and Security (AISec), co-located with ACM CCS, 2026.
+          </span>
+          <p class="filelinks">
+            <a href="AISec26">preprint</a>
+            <a href="https://github.com/EliassWang/LocaRisk">code</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div class="item">
-    <h3>Northeastern University, China</h3>
-    <p class="meta">Software College | Bachelor of Engineering in Information Security, expected July 2026</p>
-    <p>
-      Relevant coursework: Data Structures and Algorithm Analysis, Computer Networks,
-      Operating System Security, Fundamentals of Cryptography, Network and System Security,
-      Software Security, Data Mining and Machine Learning, Software Vulnerability Analysis and Mining.
-    </p>
-  </div>
+  <section>
+    <h2>Research</h2>
+    <div class="body">
+      <div class="item">
+        <h3>Localization as allocation for contaminated retrieval</h3>
+        <p class="meta">Undergraduate thesis and independent research · 2026</p>
+        <p>
+          Contamination in retrieval-augmented generation is sparse: an adversary places payloads in
+          a few segments, not the corpus. Writing expected attack success as
+          E[ASR] = p₀ − h·(p₀ − p₁) shows the benefit of a test-time defense turns on the hit rate of
+          its allocator, so it needs only to out-rank random allocation rather than to classify text
+          correctly. A training-free localizer built on a lexical and a semantic signal reduced mean
+          attack success from 88.9% to 2.65% at 0.67× the undefended token cost while retaining
+          about 88% of clean-task utility, across five open-weight models and two multi-hop QA
+          benchmarks.
+        </p>
+      </div>
+    </div>
+  </section>
 
-  <h2>Research</h2>
+  <section>
+    <h2>Experience</h2>
+    <div class="body">
+      <div class="item">
+        <h3>LLM agent security development intern</h3>
+        <p class="meta">University–enterprise training programme · March – July 2025</p>
+        <p>
+          Built a LangGraph agent with intent classification, tool routing and answer generation.
+          Routing was gated on classified intent so that the agent held least privilege by default,
+          and ambiguous or malformed model output triggered clarification, structured action
+          validation, timeouts and fail-closed fallbacks.
+        </p>
+      </div>
+    </div>
+  </section>
 
-  <div class="item">
-    <h3>Localization-Aware Test-Time Defense for Sparse-Contamination RAG</h3>
-    <p class="meta">Undergraduate Thesis, 2025–2026</p>
-    <ul>
-      <li>
-        Studying test-time defenses against indirect prompt injection attacks in
-        multi-source retrieval-augmented generation systems.
-      </li>
-      <li>
-        Designing a localization-aware defense pipeline that identifies high-risk
-        retrieved segments before applying stronger intervention.
-      </li>
-      <li>
-        Evaluating attack success rate, clean-task utility, and defense-side token
-        cost across multiple open-source language models and QA datasets.
-      </li>
-      <li>
-        Comparing localized defenses with global baselines such as perplexity-based
-        filtering and randomized smoothing.
-      </li>
-    </ul>
-  </div>
+  <section>
+    <h2>Education</h2>
+    <div class="body">
+      <h3>B.Eng. in Information Security</h3>
+      <p class="meta">Northeastern University, Software College · September 2022 – July 2026</p>
+    </div>
+  </section>
 
-  <h2>Projects</h2>
+  <section>
+    <h2>Awards</h2>
+    <div class="body">
+      <ul class="plain">
+        <li>First Prize, NEX Cup Capture-the-Flag competition</li>
+        <li>Second-Class Scholarship</li>
+      </ul>
+    </div>
+  </section>
 
-  <div class="item">
-    <h3>LocaRisk: Test-Time Defense Evaluation for RAG Prompt Injection</h3>
-    <p class="meta">Research Project, 2025–2026</p>
-    <ul>
-      <li>
-        Built an evaluation framework for testing prompt-injection defenses in
-        multi-source RAG settings.
-      </li>
-      <li>
-        Implemented attacked and clean evaluation pipelines with configurable
-        models, datasets, payloads, and defense methods.
-      </li>
-      <li>
-        Measured attack success rate, F1, semantic preservation, and model-side
-        token cost.
-      </li>
-      <li>
-        Used Python, PyTorch, Transformers, Hugging Face Datasets, pandas, and matplotlib.
-      </li>
-    </ul>
-  </div>
+  <section>
+    <h2>Skills</h2>
+    <div class="body">
+      <ul class="plain">
+        <li>Python, PyTorch, Hugging Face Transformers, LangGraph, tool-calling agent pipelines, retrieval and vector search, MCP servers</li>
+        <li>Docker, Linux, Git, LaTeX</li>
+        <li>English (TOEFL 100, CEFR C1) · Chinese (native)</li>
+      </ul>
+    </div>
+  </section>
 
- <h2>Technical Skills</h2>
+  <footer>
+    <p>Elias Wang · updated July 2026</p>
+  </footer>
 
-<p>
-  <strong>Programming:</strong> Python, Shell scripting, basic C/C++<br />
-  <strong>AI/ML:</strong> PyTorch, Transformers, Hugging Face Datasets, pandas, NumPy, scipy, matplotlib<br />
-  <strong>LLM Systems:</strong> LangGraph, LangChain basics, prompt injection evaluation, RAG experiments, LLM agent workflows, tool-use security concepts<br />
-  <strong>Security:</strong> AI Security, LLM Security, Web Security, Software Security, Network Security, Cryptography Basics<br />
-  <strong>Research Tools:</strong> LaTeX, Git, Docker, Linux, Conda
-</p>
-
-  <h2>Manuscript</h2>
-
-<div class="item">
-  <p>
-    Elias Wang. <em>Localization-Aware Test-Time Defense Allocation for
-    Sparse-Contamination RAG.</em> Manuscript submitted, 2026.
-  </p>
 </div>
-
 </body>
 </html>
