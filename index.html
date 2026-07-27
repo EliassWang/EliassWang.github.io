@@ -186,10 +186,12 @@
 
     <div class="intro">
       <p>
-        I am a final-year undergraduate in Information Security. My research concerns the security
-        of language-model systems, and my main interest is intent understanding in language-model
-        conversations — recovering what a conversation is actually trying to accomplish, and
-        treating that reading as a security signal rather than a routing label.
+        I completed a B.Eng. in Information Security at Northeastern University.
+        My research concerns the security of language-model systems, and my main interest is
+        intent understanding in language-model conversations — recovering what a conversation is
+        actually trying to accomplish across a trajectory of individually benign steps rather than
+        from any single request in isolation, and treating that reading as a security signal rather
+        than a routing label.
       </p>
       <p>
         I also work on prompt injection and retrieval poisoning, where my first paper argues that
@@ -211,7 +213,7 @@
       <ul class="plain">
         <li>Intent understanding in language-model conversations</li>
         <li>Prompt injection and jailbreaking</li>
-        <li>RAG System poison and indirectly prompt injection</li>
+        <li>RAG poisoning and indirect prompt injection</li>
         <li>Security of LLM agents and tool use</li>
       </ul>
     </div>
@@ -249,10 +251,11 @@
           a few segments, not the corpus. Writing expected attack success as
           E[ASR] = p₀ − h·(p₀ − p₁) shows the benefit of a test-time defense turns on the hit rate of
           its allocator, so it needs only to out-rank random allocation rather than to classify text
-          correctly. A training-free localizer built on a lexical and a semantic signal reduced mean
-          attack success from 88.9% to 2.65% at 0.67× the undefended token cost while retaining
-          about 88% of clean-task utility, across five open-weight models and two multi-hop QA
-          benchmarks.
+          correctly. A training-free localizer built on a lexical and a semantic signal reduced
+          pooled attack success from 80.4% to 7.5% at 0.75× the undefended token cost while
+          retaining 89% of clean-task utility, across five open-weight models, two multi-hop QA
+          benchmarks, and two attack families. Neither signal is a usable detector: each falls below
+          the random-allocation floor on the attack family it was not designed for.
         </p>
       </div>
     </div>
@@ -268,7 +271,10 @@
           Built a LangGraph agent with intent classification, tool routing and answer generation.
           Routing was gated on classified intent so that the agent held least privilege by default,
           and ambiguous or malformed model output triggered clarification, structured action
-          validation, timeouts and fail-closed fallbacks.
+          validation, timeouts and fail-closed fallbacks. The gate worked as a router and failed as a
+          defense: it read each request in isolation, so a sequence of individually reasonable
+          requests passed every check. That limitation is where my interest in intent as a security
+          signal came from.
         </p>
       </div>
     </div>
